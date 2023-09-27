@@ -1,0 +1,23 @@
+{
+  "name": "getgamebyid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf ../../build/getGameById && mkdir -p ../../build/getGameById && npm install",
+    "copy-dependencies": "rm -rf ../../build/getGameById/node_modules && cp -r node_modules ../../build/getGameById/",
+    "build-watch": "npm run prebuild && npm run copy-dependencies && tsc -w --preserveWatchOutput true",
+    "build": "npm run prebuild && tsc && npm prune --production && npm run copy-dependencies && npm run post-build",
+    "post-build": "npm install && rm -rf ../../build/getGameById/scoringDependencies && mv ../../build/getGameById/getGameById/* ../../build/getGameById/ && rm -rf ../../build/getGameById/getGameById",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^20.6.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}

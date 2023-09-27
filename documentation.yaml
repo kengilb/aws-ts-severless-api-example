@@ -1,0 +1,173 @@
+openapi: 3.0.0
+info:
+  description: >-
+    Welcome to the AWS TypeScript Serverless API Example documentation.
+  title: 'AWS TypeScript Serverless API Example'
+  version: '1'
+servers:
+  - url: 'http://127.0.0.1:3000'
+paths:
+  /games:
+    get:
+      responses:
+        200:
+          description: Ok.
+          headers: { }
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        400:
+          description: Bad request.
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+      responses:
+        200:
+          description: Resource created.
+          headers: { }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+        400:
+          description: Bad request.
+  "/games/{id}":
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: ID of the game to fetch.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        400:
+          description: Bad request.
+
+  /scoring-events:
+    get:
+      parameters:
+        - name: game_id
+          in: query
+          description: "The game ID of the game to search for associated scoring events."
+          schema:
+            type: string
+            example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+          required: true
+      responses:
+        200:
+          description: Ok.
+        400:
+          description: Bad request.
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoringEvent'
+      responses:
+        200:
+          description: Resource created.
+          headers: { }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "486585db-75f2-467d-a825-b37777c96529"
+        400:
+          description: Bad request.
+
+  "/scoring-events/{id}":
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: ID of the scoring event to fetch.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok.
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringEvent'
+        400:
+          description: Bad request.
+
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+        start:
+          type: string
+          format: date-time
+          example: "2023-09-26T22:00:00.000Z"
+        end:
+          type: string
+          format: date-time
+          example: "2023-09-27T01:00:00.000Z"
+        arrive:
+          type: string
+          format: date-time
+          example: "2023-09-26T21:30:00.000Z"
+    ScoringEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "486585db-75f2-467d-a825-b37777c96529"
+        game_id:
+          type: string
+          format: uuid
+          example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2023-09-26T22:03:56.413Z"
+        data:
+          type: object
+          properties:
+            code:
+              type: string
+              enum: ["pitch", "ball"]
+              example: "pitch"
+            attributes:
+              type: object
+              properties:
+                advances_count:
+                  type: boolean
+                  example: true
+                result:
+                  type: string
+                  enum: ["ball_in_play", "strikeout"]

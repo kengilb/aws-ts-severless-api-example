@@ -1,0 +1,23 @@
+{
+  "name": "getscoringeventbyid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf ../../build/getScoringEventById && mkdir -p ../../build/getScoringEventById && npm install",
+    "copy-dependencies": "rm -rf ../../build/getScoringEventById/node_modules && cp -r node_modules ../../build/getScoringEventById/",
+    "build-watch": "npm run prebuild && npm run copy-dependencies && tsc -w --preserveWatchOutput true",
+    "build": "npm run prebuild && tsc && npm prune --production && npm run copy-dependencies && npm run post-build",
+    "post-build": "npm install && rm -rf ../../build/getScoringEventById/scoringDependencies && mv ../../build/getScoringEventById/getScoringEventById/* ../../build/getScoringEventById/ && rm -rf ../../build/getScoringEventById/getScoringEventById",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^20.6.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}

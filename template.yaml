@@ -1,0 +1,178 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  aws-ts-serverless-api-example
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  # Variables
+  PostgresUrl:
+    Type: String
+    Default: ""
+    Description: "The connection URL to the Postgres database. e.g. postgres://USERNAME:PASSWORD@HOST:PORT/DBNAME"
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  createGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/createGame/index.handler
+      CodeUri: build/createGame/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 120
+      Description: Exposes an API to create game objects.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/games
+            Method: POST
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  getGamesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/getGames/index.handler
+      CodeUri: build/getGames/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Exposes an index API to retrieve multiple game objects.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/games
+            Method: GET
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  getGameByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/getGameById/index.handler
+      CodeUri: build/getGameById/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Exposes an API to retrieve a single game object by ID.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/games/{id}
+            Method: GET
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  createScoringEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/createScoringEvent/index.handler
+      CodeUri: build/createScoringEvent/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Exposes an API to create scoring event objects.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/scoring-events
+            Method: POST
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  getScoringEventsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/getScoringEvents/index.handler
+      CodeUri: build/getScoringEvents/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Exposes an index API to retrieve multiple scoring event objects.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/scoring-events
+            Method: GET
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  getScoringEventByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/getScoringEventById/index.handler
+      CodeUri: build/getScoringEventById/
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Exposes an API to retrieve a single scoring event object by ID.
+      Environment:
+        Variables:
+          POSTGRES_URL: !Ref PostgresUrl
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{version}/scoring-events/{id}
+            Method: GET
+      Layers:
+        - !Ref scoringDependenciesLayer
+
+  scoringDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: scoringDependencies
+      Description: Dependencies for the game scoring API lambdas.
+      ContentUri: build/scoringDependencies/.
+      CompatibleRuntimes:
+        - nodejs18.x
+
+Outputs:
+  WebEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

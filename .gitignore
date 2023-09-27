@@ -1,0 +1,9 @@
+# IDE Files
+.idea
+# Dependencies
+node_modules
+# Artifacts
+build
+.aws-sam
+# Local Development Files
+env.json

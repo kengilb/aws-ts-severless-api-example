@@ -1,0 +1,30 @@
+{
+  "name": "scoringdependencies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf ../../../build/scoringDependencies/nodejs && mkdir -p ../../../build/scoringDependencies/nodejs && npm install",
+    "copy-dependencies": "rm -rf ../../../build/scoringDependencies/nodejs/node_modules && cp -r node_modules ../../../build/scoringDependencies/nodejs/",
+    "build-watch": "npm run prebuild && npm run copy-dependencies && tsc -w --preserveWatchOutput true",
+    "build": "npm run prebuild && tsc && npm prune --production && npm run copy-dependencies && npm run post-build",
+    "post-build": "npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.32.1",
+    "sequelize-typescript": "^2.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.9",
+    "@types/validator": "^13.11.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}

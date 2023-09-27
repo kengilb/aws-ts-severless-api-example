@@ -166,3 +166,6 @@ enum ScorekeepingResult {
     Strikeout,
 }
 ```
+
+Social Media Image Credit:
+[Image by starline on Freepik](https://www.freepik.com/free-vector/cloud-computing-polygonal-wireframe-technology-concept_12071198.htm#query=aws&position=1&from_view=keyword&track=sph)

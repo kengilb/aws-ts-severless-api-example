@@ -39,7 +39,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+                    example: "a87a9a71-3bb5-4d53-ac0e-81a7c8f8c591"
         400:
           description: Bad request.
   "/games/{id}":
@@ -70,7 +70,7 @@ paths:
           description: "The game ID of the game to search for associated scoring events."
           schema:
             type: string
-            example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+            example: "a87a9a71-3bb5-4d53-ac0e-81a7c8f8c591"
           required: true
       responses:
         200:
@@ -95,7 +95,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    example: "486585db-75f2-467d-a825-b37777c96529"
+                    example: "d69e4409-29b8-403c-8e2b-78c25d2681a1"
         400:
           description: Bad request.
 
@@ -127,7 +127,7 @@ components:
         id:
           type: string
           format: uuid
-          example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+          example: "a87a9a71-3bb5-4d53-ac0e-81a7c8f8c591"
         start:
           type: string
           format: date-time
@@ -146,11 +146,11 @@ components:
         id:
           type: string
           format: uuid
-          example: "486585db-75f2-467d-a825-b37777c96529"
+          example: "d69e4409-29b8-403c-8e2b-78c25d2681a1"
         game_id:
           type: string
           format: uuid
-          example: "6690cf59-79de-445c-b9f7-04b7f1ee7990"
+          example: "a87a9a71-3bb5-4d53-ac0e-81a7c8f8c591"
         timestamp:
           type: string
           format: date-time
